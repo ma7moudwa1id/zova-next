@@ -2,19 +2,27 @@
 import { IconPackage, IconTruck, IconShieldCheck } from "@tabler/icons-react";
 import AllOrders from "../components/AllOrders";
 import getAllOrders from "../services/Orders.Actions";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppState } from "@/app/store/store";
 import { useEffect, useState } from "react";
 import { Order } from "../types/OrderTypes";
+import { verifyToken } from "@/app/(auth)/auth/auth.Actions";
+import { authActions } from "@/app/(auth)/slice/auth.Slice";
 
 export default function OrdersScreen() {
   const { userData } = useSelector((state: AppState) => state.authReducer);
+  const { authStatus } = authActions;
+  const dispatch = useDispatch();
 
   const [allOrders, setAllOrders] = useState<null | Order[]>(null);
 
   useEffect(() => {
     async function handleOrders() {
-      if (!userData?.id) return;
+      if (!userData?.id) {
+        const response = await verifyToken();
+        dispatch(authStatus(response));
+        return;
+      }
       const ordersResponse = await getAllOrders(userData?.id);
       if (!ordersResponse.data) {
         return;
@@ -23,7 +31,6 @@ export default function OrdersScreen() {
     }
     handleOrders();
   }, [userData?.id]);
-
 
   return (
     <div className="min-h-screen bg-violet-50/60">
@@ -54,7 +61,8 @@ export default function OrdersScreen() {
             </div>
             <div className="flex flex-wrap gap-2">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-violet-700">
-                <IconPackage size={14} /> {allOrders?.length} {allOrders?.length===1?"Order":"Orders"} 
+                <IconPackage size={14} /> {allOrders?.length}{" "}
+                {allOrders?.length === 1 ? "Order" : "Orders"}
               </span>
             </div>
           </div>
@@ -63,7 +71,7 @@ export default function OrdersScreen() {
         <div className="">
           {/* Orders list */}
           <div className="">
-            <AllOrders allOrders={allOrders}/>
+            <AllOrders allOrders={allOrders} />
           </div>
         </div>
       </div>
