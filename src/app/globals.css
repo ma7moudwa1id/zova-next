@@ -9,9 +9,9 @@ body {
 }
 .container {
   @apply w-full mx-auto px-4
-         sm:px-6
-         lg:px-8
-         max-w-360;
+         sm:px-5
+         lg:px-6
+         xl:max-w-7xl;
 }
 .btn-primary {
   @apply rounded-full px-6 py-2 bg-violet-500 text-white font-semibold cursor-pointer hover:bg-violet-900 transition-colors duration-200;
