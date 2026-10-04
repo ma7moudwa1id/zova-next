@@ -22,7 +22,7 @@ export default function OrdersScreen() {
       setAllOrders(ordersResponse.data);
     }
     handleOrders();
-  }, []);
+  }, [userData?.id]);
 
 
   return (
