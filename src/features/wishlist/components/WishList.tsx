@@ -1,7 +1,6 @@
-import { RefObject, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { wishListApiResponse } from "../types/Wishlist.Types";
 import WishCard from "./WishCard";
-import { Dispatch } from "@reduxjs/toolkit";
 
 export default function WishList({
   wishData,
@@ -12,7 +11,7 @@ export default function WishList({
   wishData: wishListApiResponse | null;
   wishStatus: string;
   Changed: boolean;
-  setChanged: any;
+  setChanged: Dispatch<SetStateAction<boolean>>;
 }) {
   const empty = (
     <>
@@ -42,9 +41,17 @@ export default function WishList({
     <div className="space-y-4">
       {/* Grid of cards - static */}
       <div className="space-y-2">
-        {data.map((item) => (
-          <WishCard key={item._id} wishInfo={item} Changed={Changed} setChanged={setChanged} />
-        ))}
+        {data.map((item) => {
+          if (typeof item === "string") return null;
+          return (
+            <WishCard
+              key={item._id}
+              wishInfo={item}
+              Changed={Changed}
+              setChanged={setChanged}
+            />
+          );
+        })}
       </div>
 
       {wishData.data.length === 0 && empty}

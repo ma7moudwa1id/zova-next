@@ -43,7 +43,7 @@ export interface Product {
 export interface wishListApiResponse {
   status: string;
   count: number;
-  data: Product[] | [];
+  data: Product[] | string[];
 }
 
 export interface wishListApiErrorResponse {

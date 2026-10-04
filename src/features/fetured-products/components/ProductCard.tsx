@@ -62,9 +62,18 @@ export default function ProductCard({ product }: { product: ProductResponse }) {
   const dispatch = useDispatch();
 
   const [isLiked, setIsLiked] = useState(
-    data.data.some((item) => item._id === product?._id) ||
-      data.data.includes(_id),
+    data.data.some((item) =>
+      typeof item === "string" ? item === _id : item._id === _id
+    ),
   );
+
+  useEffect(() => {
+    setIsLiked(
+      data.data.some((item) =>
+        typeof item === "string" ? item === _id : item._id === _id
+      ),
+    );
+  }, [data.data, _id]);
 
   async function likeProduct() {
     const response = await addToWishList(_id);

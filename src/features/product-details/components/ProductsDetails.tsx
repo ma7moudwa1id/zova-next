@@ -140,11 +140,12 @@ export default function ProductDetails({ id }: { id: string }) {
   useEffect(() => {
     if (product) {
       setWishlist(
-        data.data.some((item) => item._id === product?._id) ||
-          data.data.includes(product?._id),
+        data.data.some((item) =>
+          typeof item === "string" ? item === product._id : item._id === product._id
+        ),
       );
     }
-  }, [product?._id]);
+  }, [product?._id, data.data]);
 
   async function handleAddToCart(id: string) {
     setIsAdding(true);
